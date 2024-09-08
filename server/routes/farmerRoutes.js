@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const farmerAuthController = require('../controllers/farmerAuthController'); // Assuming farmerAuthController.js is in controllers folder
+const farmerAuthController = require('../controllers/farmerAuthController'); // Assuming farmerAuthController.jsxx is in controllers folder
 const authMiddleware = require('../middlewares/authMiddleware'); // Authentication middleware to protect routes
 
 // Register a new farmer

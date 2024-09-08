@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const contractorAuthController = require('../controllers/contractorAuthController'); // Assuming contractorAuthController.js is in controllers folder
+const contractorAuthController = require('../controllers/contractorAuthController'); // Assuming contractorAuthController.jsxx is in controllers folder
 const authMiddleware = require('../middlewares/authMiddleware'); // Middleware to protect routes
 
 // Register a new contractor

@@ -1,0 +1,71 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #28a745; /* Green background for the navbar */
+    color: black; /* Black text color */
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo img {
+    height: 60px; /* Increased logo size */
+    margin-right: 15px; /* Spacing between logo and text */
+  }
+  
+  .logo h1 {
+    font-size: 24px;
+    color: black; /* Black text color */
+    font-family: sans-serif; /* Adjust font style */
+  }
+  
+  /* Navbar Links */
+  .nav-links {
+    list-style: none;
+    display: flex; /* Ensure links are horizontal */
+    gap: 20px;
+  }
+  
+  .nav-links li {
+    display: inline;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: black; /* Black text color */
+    padding: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    background-color: #ffeb3b; /* Mustard yellow background on hover */
+    border-radius: 5px; /* Rounded effect */
+  }
+  
+  /* Mobile responsive: Navbar stays horizontal until mobile breakpoint */
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none; /* Hide links on mobile */
+    }
+  
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .logo {
+      margin-bottom: 10px;
+    }
+  }
+  

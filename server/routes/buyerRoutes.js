@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const buyerAuthController = require('../controllers/buyerAuthController'); // Assuming buyerAuthController.js is in controllers folder
+const buyerAuthController = require('../controllers/buyerAuthController'); // Assuming buyerAuthController.jsxx is in controllers folder
 const authMiddleware = require('../middlewares/authMiddleware'); // Authentication middleware to protect routes
 
 // Register a new buyer

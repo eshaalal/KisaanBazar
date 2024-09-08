@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
     const token = req.header('Authorization')?.split(' ')[1]; // Extract token
 
     if (!token) {
-        return res.status(401).json({ message: 'No token, authorization denied' });
+        return res.status(401).jsxxon({ message: 'No token, authorization denied' });
     }
 
     try {
@@ -17,7 +17,7 @@ const authMiddleware = (req, res, next) => {
         req.user = decoded; // Attach decoded user information to request
         next(); // Proceed to the next middleware/route handler
     } catch (error) {
-        res.status(401).json({ message: 'Token is not valid' });
+        res.status(401).jsxxon({ message: 'Token is not valid' });
     }
 };
 

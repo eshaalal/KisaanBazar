@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Farmer = require('../models/farmerModel'); // Assuming FarmerModal.js is in models folder
+const Farmer = require('../models/farmerModel'); // Assuming FarmerModal.jsx is in models folder
 
 // JWT Secret key
 const JWT_SECRET = 'secret123'; // Replace this with a strong secret key

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Contractor = require('../models/contractorModel'); // Assuming contractorModel.js is in the models folder
+const Contractor = require('../models/contractorModel'); // Assuming contractorModel.jsx is in the models folder
 
 // JWT Secret key (consider using environment variables for production)
 const JWT_SECRET = 'secret123';
