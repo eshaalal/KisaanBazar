@@ -10,7 +10,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #28a745; /* Green background for the navbar */
+    background-color: #7CB342; /* Green background for the navbar */
     color: black; /* Black text color */
   }
   
@@ -49,7 +49,7 @@
   }
   
   .nav-links a:hover {
-    background-color: #ffeb3b; /* Mustard yellow background on hover */
+    background-color: #FFF59D; /* Mustard yellow background on hover */
     border-radius: 5px; /* Rounded effect */
   }
   

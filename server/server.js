@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 const farmerRoutes = require('./routes/farmerRoutes'); // Assuming routes are inside a folder called routes
 const buyerRoutes= require('./routes/buyerRoutes');
 const contractorRoutes = require('./routes/contractorRoutes'); // Add contractor routes
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON requests
+app.use(cors());
 
 // Farmer routes
 app.use('/api/farmers', farmerRoutes);

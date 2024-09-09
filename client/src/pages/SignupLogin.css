@@ -1,0 +1,72 @@
+.signup-login-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .auth-switch {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .auth-button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background-color: #F7E2B3; /* Mustard yellow for inactive button */
+    color: #000; /* Black text for contrast */
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .auth-button.active {
+    background-color: #28a745; /* Green color for active button */
+    color: #FFF59D; /* Light color text */
+  }
+  
+  .auth-form {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .login-form, .signup-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
+  input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .user-type-selector {
+    margin-bottom: 20px;
+  }
+  
+  .user-type-selector label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #28a745; /* Green color */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  

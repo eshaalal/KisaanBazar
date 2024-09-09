@@ -37,11 +37,7 @@ const farmerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isPlanted: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
+    
     location: {
         type: String,
         required: true
