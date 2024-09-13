@@ -11,5 +11,6 @@ router.post('/login', farmerAuthController.loginFarmer);
 
 // Get farmer profile (protected route)
 router.get('/profile', authMiddleware, farmerAuthController.getFarmerProfile);
+router.put('/update', authMiddleware, farmerAuthController.updateFarmer);
 
 module.exports = router;

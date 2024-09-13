@@ -78,3 +78,42 @@ exports.getFarmerProfile = async (req, res) => {
       res.status(500).json({ message: 'Server error', error: error.message || error });
   }
 };
+
+
+
+// Update farmer details
+exports.updateFarmer = async (req, res) => {
+    const { name, email, phoneNumber, address, plantType, location, landSize, landImage, password } = req.body;
+
+    try {
+        // Find farmer by ID
+        const farmer = await Farmer.findById(req.user.id);
+        if (!farmer) {
+            return res.status(404).json({ message: 'Farmer not found' });
+        }
+
+        // Update farmer details
+        farmer.name = name || farmer.name;
+        farmer.email = email || farmer.email;
+        farmer.phoneNumber = phoneNumber || farmer.phoneNumber;
+        farmer.address = address || farmer.address;
+        farmer.plantType = plantType || farmer.plantType;
+        farmer.location = location || farmer.location;
+        farmer.landSize = landSize || farmer.landSize;
+        farmer.landImage = landImage || farmer.landImage;
+
+        // If password is provided, hash it and update
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            farmer.password = hashedPassword;
+        }
+
+        // Save the updated farmer information
+        await farmer.save();
+
+        res.status(200).json({ message: 'Farmer updated successfully', farmer });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+

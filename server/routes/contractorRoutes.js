@@ -11,5 +11,5 @@ router.post('/login', contractorAuthController.loginContractor);
 
 // Get contractor profile (protected route)
 router.get('/profile', authMiddleware, contractorAuthController.getContractorProfile);
-
+router.put('/update',authMiddleware,contractorAuthController.updateContractor);
 module.exports = router;

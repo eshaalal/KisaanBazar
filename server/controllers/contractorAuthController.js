@@ -77,3 +77,37 @@ exports.getContractorProfile = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message || error });
     }
 };
+exports.updateContractor = async (req, res) => {
+    const { name, email, phoneNumber, aadharNumber, companyName, companyLicence, companyAddress, plantsNeeded, password } = req.body;
+
+    try {
+        // Find contractor by ID
+        const contractor = await Contractor.findById(req.user.id);
+        if (!contractor) {
+            return res.status(404).json({ message: 'Contractor not found' });
+        }
+
+        // Update contractor details
+        contractor.name = name || contractor.name;
+        contractor.email = email || contractor.email;
+        contractor.phoneNumber = phoneNumber || contractor.phoneNumber;
+        contractor.aadharNumber = aadharNumber || contractor.aadharNumber;
+        contractor.companyName = companyName || contractor.companyName;
+        contractor.companyLicence = companyLicence || contractor.companyLicence;
+        contractor.companyAddress = companyAddress || contractor.companyAddress;
+        contractor.plantsNeeded = plantsNeeded || contractor.plantsNeeded;
+
+        // If password is provided, hash it and update
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            contractor.password = hashedPassword;
+        }
+
+        // Save the updated contractor information
+        await contractor.save();
+
+        res.status(200).json({ message: 'Contractor updated successfully', contractor });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
