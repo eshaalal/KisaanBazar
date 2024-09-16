@@ -1,278 +1,303 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './SignupLogin.css';
-import { registerFarmer, registerBuyer, registerContractor } from '../api/api'; // Adjust the import path as needed
+import './Home';
 
-const SignupLogin = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [userType, setUserType] = useState('farmer');
+const SignupLogin = ({ onLogin }) => {
+  const [isRegister, setIsRegister] = useState(true);
+  const [role, setRole] = useState('contractor');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    phoneNumber: '',
     aadharNumber: '',
+    phoneNumber: '',
+    companyName: '',
+    companyLicence: '',
+    street: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    plantsNeeded: '',
+    address: '',
     plantType: '',
     location: '',
     landSize: '',
     landImage: '',
-    plantNeeded: '',
-    companyName: '',
-    companyLicence: '',
-    companyAddress: {
-      street: '',
-      city: '',
-      state: '',
-      zipCode: '',
-    },
-    plantsNeeded: '',
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  
+  const navigate = useNavigate();
 
-  const handleToggle = () => setIsLogin(!isLogin);
-
-  const handleUserTypeChange = (e) => setUserType(e.target.value);
-
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name.includes('companyAddress.')) {
-      const field = name.split('.')[1];
-      setFormData((prevData) => ({
-        ...prevData,
-        companyAddress: {
-          ...prevData.companyAddress,
-          [field]: value,
-        },
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+    setFormData(prevData => ({ ...prevData, [name]: value }));
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      let dataToSend = { ...formData };
+      if (role === 'contractor') {
+        dataToSend.companyAddress = {
+          street: formData.street,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.zipCode
+        };
+        delete dataToSend.street;
+        delete dataToSend.city;
+        delete dataToSend.state;
+        delete dataToSend.zipCode;
+        
+        dataToSend.plantsNeeded = formData.plantsNeeded.split(',').map(plant => plant.trim());
+      } else if (role === 'farmer') {
+        dataToSend.companyName = undefined;
+        dataToSend.companyLicence = undefined;
+      }
+      const url = role === 'contractor' ? 'http://localhost:5000/api/contractors/register' : 'http://localhost:5000/api/farmers/register';
+      const res = await axios.post(url, dataToSend);
+      alert(res.data.message);
+
+      console.log('Registering as:', role);
+      onLogin(role); // Pass the role when calling onLogin
+      console.log('User registered and logged in');
+      navigate('/', { state: { role } });
+
+    } catch (err) {
+      alert('Error during registration: ' + (err.response?.data?.message || err.message));
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      let response;
-      if (isLogin) {
-        // Handle login logic if needed
-        return;
-      }
-      switch (userType) {
-        case 'farmer':
-          response = await registerFarmer(formData);
-          break;
-        case 'buyer':
-          response = await registerBuyer(formData);
-          break;
-        case 'contractor':
-          response = await registerContractor(formData);
-          break;
-        default:
-          throw new Error('Invalid user type');
-      }
+      const url = role === 'contractor' ? 'http://localhost:5000/api/contractors/login' : 'http://localhost:5000/api/farmers/login';
+      const res = await axios.post(url, {
+        email: formData.email,
+        password: formData.password,
+      });
+      alert(res.data.message);
 
-      if (response.success) {
-        setSuccess('Registration successful!');
-        setError('');
-        setFormData({ // Reset form data if needed
-          name: '',
-          email: '',
-          password: '',
-          phoneNumber: '',
-          aadharNumber: '',
-          plantType: '',
-          location: '',
-          landSize: '',
-          landImage: '',
-          plantNeeded: '',
-          companyName: '',
-          companyLicence: '',
-          companyAddress: {
-            street: '',
-            city: '',
-            state: '',
-            zipCode: '',
-          },
-          plantsNeeded: '',
-        });
-      } else {
-        throw new Error(response.message || 'Registration failed');
-      }
+      console.log('Logging in as:', role);
+      onLogin(role); // Pass the role when calling onLogin
+      console.log('User logged in');
+      navigate('/', { state: { role } });
+
     } catch (err) {
-      setError(err.message);
-      setSuccess('');
+      alert('Error during login: ' + (err.response?.data?.message || err.message));
     }
   };
 
   return (
-    <div className="signup-login-container">
-      <div className="auth-switch">
-        <button className={`auth-button ${isLogin ? 'active' : ''}`} onClick={() => setIsLogin(true)}>Login</button>
-        <button className={`auth-button ${!isLogin ? 'active' : ''}`} onClick={() => setIsLogin(false)}>Sign Up</button>
+    <div className="auth-form">
+      <h2>{isRegister ? 'Register' : 'Login'} as {role}</h2>
+
+      <div className="role-options">
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="contractor"
+            checked={role === 'contractor'}
+            onChange={() => setRole('contractor')}
+          />
+          Contractor
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="farmer"
+            checked={role === 'farmer'}
+            onChange={() => setRole('farmer')}
+          />
+          Farmer
+        </label>
       </div>
 
-      <div className="auth-form">
-        {isLogin ? (
-          <LoginForm />
-        ) : (
-          <SignupForm
-            userType={userType}
-            onUserTypeChange={handleUserTypeChange}
-            formData={formData}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            error={error}
-            success={success}
-          />
+      <form onSubmit={isRegister ? handleRegister : handleLogin}>
+        {isRegister && (
+          <>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Name"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="Password"
+              required
+            />
+            <input
+              type="text"
+              name="aadharNumber"
+              value={formData.aadharNumber}
+              onChange={handleInputChange}
+              placeholder="Aadhar Number"
+              required
+            />
+            <input
+              type="text"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              placeholder="Phone Number"
+              required
+            />
+          </>
         )}
-      </div>
+
+        {!isRegister && (
+          <>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="Password"
+              required
+            />
+          </>
+        )}
+
+        {isRegister && role === 'contractor' && (
+          <>
+            <input
+              type="text"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleInputChange}
+              placeholder="Company Name"
+              required
+            />
+            <input
+              type="text"
+              name="companyLicence"
+              value={formData.companyLicence}
+              onChange={handleInputChange}
+              placeholder="Company Licence"
+              required
+            />
+            <input
+              type="text"
+              name="street"
+              value={formData.street}
+              onChange={handleInputChange}
+              placeholder="Street"
+            />
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder="City"
+            />
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleInputChange}
+              placeholder="State"
+            />
+            <input
+              type="text"
+              name="zipCode"
+              value={formData.zipCode}
+              onChange={handleInputChange}
+              placeholder="Zip Code"
+            />
+            <input
+              type="text"
+              name="plantsNeeded"
+              value={formData.plantsNeeded}
+              onChange={handleInputChange}
+              placeholder="Plants Needed (comma-separated)"
+            />
+          </>
+        )}
+
+        {isRegister && role === 'farmer' && (
+          <>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Address"
+              required
+            />
+            <input
+              type="text"
+              name="plantType"
+              value={formData.plantType}
+              onChange={handleInputChange}
+              placeholder="Plant Type"
+              required
+            />
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleInputChange}
+              placeholder="Location"
+              required
+            />
+            <input
+              type="text"
+              name="landSize"
+              value={formData.landSize}
+              onChange={handleInputChange}
+              placeholder="Land Size"
+              required
+            />
+            <input
+              type="text"
+              name="landImage"
+              value={formData.landImage}
+              onChange={handleInputChange}
+              placeholder="Land Image URL"
+              required
+            />
+          </>
+        )}
+
+        <button type="submit">
+          {isRegister ? 'Register' : 'Login'}
+        </button>
+      </form>
+
+      <button
+        type="button"
+        className="switch-btn"
+        onClick={() => setIsRegister(!isRegister)}
+      >
+        {isRegister ? 'Already have an account? Login' : "Don't have an account? Register"}
+      </button>
     </div>
   );
 };
-
-const LoginForm = () => (
-  <form className="login-form">
-    <h2>Login</h2>
-    <label>
-      Email:
-      <input type="email" name="email" required />
-    </label>
-    <label>
-      Password:
-      <input type="password" name="password" required />
-    </label>
-    <button type="submit">Login</button>
-  </form>
-);
-
-const SignupForm = ({ userType, onUserTypeChange, formData, onChange, onSubmit, error, success }) => (
-  <form className="signup-form" onSubmit={onSubmit}>
-    <h2>Sign Up</h2>
-    <div className="user-type-selector">
-      <label>
-        <input
-          type="radio"
-          value="farmer"
-          checked={userType === 'farmer'}
-          onChange={onUserTypeChange}
-        />
-        Farmer
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="buyer"
-          checked={userType === 'buyer'}
-          onChange={onUserTypeChange}
-        />
-        Buyer
-      </label>
-      <label>
-        <input
-          type="radio"
-          value="contractor"
-          checked={userType === 'contractor'}
-          onChange={onUserTypeChange}
-        />
-        Contractor
-      </label>
-    </div>
-
-    <label>
-      Name:
-      <input type="text" name="name" value={formData.name} onChange={onChange} required />
-    </label>
-    <label>
-      Email:
-      <input type="email" name="email" value={formData.email} onChange={onChange} required />
-    </label>
-    <label>
-      Password:
-      <input type="password" name="password" value={formData.password} onChange={onChange} required />
-    </label>
-    <label>
-      Phone Number:
-      <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={onChange} required />
-    </label>
-    <label>
-      Aadhar Number:
-      <input type="text" name="aadharNumber" value={formData.aadharNumber} onChange={onChange} required />
-    </label>
-
-    {userType === 'farmer' && (
-      <>
-        <label>
-          Plant Type:
-          <input type="text" name="plantType" value={formData.plantType} onChange={onChange} required />
-        </label>
-        <label>
-          Location:
-          <input type="text" name="location" value={formData.location} onChange={onChange} required />
-        </label>
-        <label>
-          Land Size:
-          <input type="number" name="landSize" value={formData.landSize} onChange={onChange} required />
-        </label>
-        <label>
-          Land Image (URL or base64):
-          <input type="text" name="landImage" value={formData.landImage} onChange={onChange} />
-        </label>
-      </>
-    )}
-
-    {userType === 'buyer' && (
-      <>
-        <label>
-          Location:
-          <input type="text" name="location" value={formData.location} onChange={onChange} required />
-        </label>
-        <label>
-          Plant Needed:
-          <input type="text" name="plantNeeded" value={formData.plantNeeded} onChange={onChange} required />
-        </label>
-      </>
-    )}
-
-    {userType === 'contractor' && (
-      <>
-        <label>
-          Company Name:
-          <input type="text" name="companyName" value={formData.companyName} onChange={onChange} required />
-        </label>
-        <label>
-          Company License:
-          <input type="text" name="companyLicence" value={formData.companyLicence} onChange={onChange} required />
-        </label>
-        <label>
-          Company Address - Street:
-          <input type="text" name="companyAddress.street" value={formData.companyAddress.street} onChange={onChange} required />
-        </label>
-        <label>
-          Company Address - City:
-          <input type="text" name="companyAddress.city" value={formData.companyAddress.city} onChange={onChange} required />
-        </label>
-        <label>
-          Company Address - State:
-          <input type="text" name="companyAddress.state" value={formData.companyAddress.state} onChange={onChange} required />
-        </label>
-        <label>
-          Company Address - Zip Code:
-          <input type="text" name="companyAddress.zipCode" value={formData.companyAddress.zipCode} onChange={onChange} required />
-        </label>
-        <label>
-          Plants Needed:
-          <input type="text" name="plantsNeeded" value={formData.plantsNeeded} onChange={onChange} required />
-        </label>
-      </>
-    )}
-
-    <button type="submit">Sign Up</button>
-    {error && <p className="error-message">{error}</p>}
-    {success && <p className="success-message">{success}</p>}
-  </form>
-);
 
 export default SignupLogin;

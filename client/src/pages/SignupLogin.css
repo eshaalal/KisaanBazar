@@ -1,72 +1,100 @@
-.signup-login-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .auth-switch {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-  
-  .auth-button {
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    background-color: #F7E2B3; /* Mustard yellow for inactive button */
-    color: #000; /* Black text for contrast */
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .auth-button.active {
-    background-color: #28a745; /* Green color for active button */
-    color: #FFF59D; /* Light color text */
-  }
-  
+/* General styles for the form */
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.auth-form input[type="text"]::placeholder,
+.auth-form input[type="email"]::placeholder,
+.auth-form input[type="password"]::placeholder {
+  color: #999;
+}
+
+.auth-form input[type="radio"] {
+  margin-right: 0.5rem;
+}
+
+.auth-form label {
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.auth-form .role-options {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.auth-form button[type="submit"],
+.auth-form button[type="button"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-form button[type="button"] {
+  background-color: #007bff;
+}
+
+.auth-form button[type="submit"]:hover,
+.auth-form button[type="button"]:hover {
+  background-color: #218838;
+}
+
+.auth-form button[type="button"].switch-btn {
+  background-color: #ffae42;
+}
+
+.auth-form button[type="button"].switch-btn:hover {
+  background-color: #e69533;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
   .auth-form {
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+    padding: 1.5rem;
   }
-  
-  .login-form, .signup-form {
-    display: flex;
-    flex-direction: column;
+
+  .auth-form input[type="text"],
+  .auth-form input[type="email"],
+  .auth-form input[type="password"] {
+    padding: 0.5rem;
   }
-  
-  label {
-    margin-bottom: 10px;
+
+  .auth-form button {
+    padding: 0.5rem;
   }
-  
-  input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .user-type-selector {
-    margin-bottom: 20px;
-  }
-  
-  .user-type-selector label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #28a745; /* Green color */
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  button:hover {
-    background-color: #218838; /* Darker green on hover */
-  }
-  
+}
